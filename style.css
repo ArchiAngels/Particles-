@@ -1,0 +1,14 @@
+body{
+    padding: 0;
+    margin: 0;
+    height:100vh;
+    background-image:linear-gradient(to right,#544a7d,#ffd452);
+}
+.wrap_to_canv{
+    width:100%;
+    height:100%;
+    background-color:rgba(0, 0, 0, 0.5);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
