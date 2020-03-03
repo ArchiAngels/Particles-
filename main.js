@@ -4,8 +4,9 @@ const ctx = cnv.getContext('2d');
 cnv.style.background = `#fff`;
 let looper_let;
 let mouseCoors;
-let max_histori_int = 50;
-let max_circles_on_cnv = 50;
+let max_histori_int = 40;
+let max_circles_on_cnv = 100;
+let protect_let = false;
 
 cnv.addEventListener('mousemove',function(e){
     mouseCoors = {
@@ -14,19 +15,23 @@ cnv.addEventListener('mousemove',function(e){
     }
 })
 cnv.addEventListener('mousedown',function(){
-    // max_histori_int = 150;
+    protect_let = true;
     looper_let = setInterval(looper_func,20);
-    // LiveCircle();
-    console.log(mouseCoors);
+    // console.log(mouseCoors);
     function looper_func(){
-        go_To(arrCircle,mouseCoors);
-    }
+        if(protect_let == false){}
+        else{go_To(arrCircle,mouseCoors);}
+   }
 })
 window.addEventListener('mouseup',function(){
-    clearInterval(looper_let);
-    console.log('go off');
+    stop_loop();
     // max_histori_int = 45;
 })
+function stop_loop(){
+    protect_let = false;
+    clearInterval(looper_let);
+    console.log('go off');
+}
 
 let arrCircle = [];
 if(cnv && ctx){
@@ -53,7 +58,7 @@ function init_circles(n){
             vx:1+Math.random()*3,
             vy:1+Math.random()*4,
             histori_way: [],
-            size:(2+Math.random())*3,
+            size:(2*Math.random())*3,
             color: Math.random() > 0.8 ? '#000000' :
                      Math.random() > 0.7 ? '#FF0000' : 
                         Math.random() > 0.6 ? '#FFFF00' :
@@ -64,7 +69,7 @@ function init_circles(n){
 }
 
 function draw_circl(){
-    for(let i = 0 ; i< arrCircle.length;i++){
+    for(let i = 0 ; i< arrCircle.length - 1;i++){
         ctx.fillStyle = arrCircle[i].color;
         ctx.beginPath();
         ctx.arc(arrCircle[i].x,arrCircle[i].y,arrCircle[i].size,0,Math.PI*2,true);
@@ -76,7 +81,7 @@ function LiveCircle(){
     clearCnv();
     
     for(let i = 0; i < arrCircle.length; i++){
-        ctx.lineWidth = 5;
+        ctx.lineWidth = arrCircle[i].size;
         arrCircle[i].x += arrCircle[i].vx;
         arrCircle[i].y += arrCircle[i].vy;
         arrCircle[i].histori_way.push({x1: arrCircle[i].x,y1: arrCircle[i].y});
@@ -85,7 +90,7 @@ function LiveCircle(){
         }
         ctx.strokeStyle = arrCircle[i].color;
         if(i == arrCircle.length - 1){
-            ctx.strokeStyle = `rgba(0,0,0,0.2)`;
+            ctx.strokeStyle = `rgba(0,0,0,0)`;
         }
         ctx.beginPath();
         for(let kk = 0; kk < arrCircle[i].histori_way.length;kk++){
